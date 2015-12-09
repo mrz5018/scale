@@ -1,0 +1,9 @@
+CACHE MANIFEST
+
+# Version 1.5
+
+NETWORK:
+*
+
+CACHE:
+index.html
