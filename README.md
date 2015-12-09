@@ -6,7 +6,9 @@ Unfortunately, I can't hide the Safari UI when opening it from the home screen b
 Obviously, like all the other apps, you need something like a spoon to put your items on. Small fruit and vegetables can be placed directly on the screen.
 
 Reddit:
+
 https://redd.it/3w2rkt (/r/iPhone)
+
 https://redd.it/3w31a2 (/r/Apple)
 
 based on https://github.com/freinbichler/3d-touch
