@@ -1,0 +1,84 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Pressure Scale</title>
+  <meta name="viewport" content="initial-scale=1.0001, minimum-scale=1.0001, maximum-scale=1.0001, user-scalable=no">
+  <meta name="description" content="Weight small objects using your 3D touch enabled iPhone!">
+  <meta name="author" content="Tarun Pemmaraju">
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      -webkit-user-select: none;
+      font-family: -apple-system;
+    }
+    
+    #forcearea {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #e3e3e3;
+      padding-top: 200px;
+      text-align: center;
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="forcearea">
+    0 grams
+  </div>
+  <script>
+    var element = document.getElementById('forcearea');
+
+    addForceTouchToElement(element);
+
+    function onTouchStart(e) {
+      e.preventDefault();
+      checkForce(e);
+    }
+
+    function onTouchMove(e) {
+      e.preventDefault();
+      checkForce(e);
+    }
+
+    function onTouchEnd(e) {
+      e.preventDefault();
+      touch = null;
+    }
+
+    function checkForce(e) {
+      touch = e.touches[0];
+      setTimeout(refreshForceValue.bind(touch), 10);
+    }
+
+    function refreshForceValue() {
+      var touchEvent = this;
+      var forceValue = 0;
+      if (touchEvent) {
+        forceValue = touchEvent.force || 0;
+        setTimeout(refreshForceValue.bind(touch), 10);
+      } else {
+        forceValue = 0;
+      }
+
+      element.innerHTML = Math.round(forceValue * 385) + " grams";
+    }
+
+    function addForceTouchToElement(elem) {
+      elem.addEventListener('touchstart', onTouchStart, false);
+      elem.addEventListener('touchmove', onTouchMove, false);
+      elem.addEventListener('touchend', onTouchEnd, false);
+    }
+  </script>
+</body>
+
+</html>
