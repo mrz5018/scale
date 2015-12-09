@@ -41,14 +41,7 @@
     // based on https://github.com/freinbichler/3d-touch
     var element = document.getElementById('forcearea');
 
-    addForceTouchToElement(element);
-
-    function onTouchStart(e) {
-      e.preventDefault();
-      checkForce(e);
-    }
-
-    function onTouchMove(e) {
+    function onTouchStartMove(e) {
       e.preventDefault();
       checkForce(e);
     }
@@ -61,6 +54,15 @@
     function checkForce(e) {
       touch = e.touches[0];
       setTimeout(refreshForceValue.bind(touch), 10);
+    }
+
+    function checkMacForce(e) {
+      // max value for trackpad is 3.0 compare to 1.0 on iOS
+      refreshMacForceValue(e.webkitForce / 3);
+    }
+
+    function refreshMacForceValue(forceValue) {
+      element.innerHTML = Math.round(forceValue * 1000) + " <br><sup style=\"color:red\">Uncalibrated for Mac</sup>";
     }
 
     function refreshForceValue() {
@@ -76,11 +78,13 @@
       element.innerHTML = Math.round(forceValue * 385) + " grams";
     }
 
-    function addForceTouchToElement(elem) {
-      elem.addEventListener('touchstart', onTouchStart, false);
-      elem.addEventListener('touchmove', onTouchMove, false);
-      elem.addEventListener('touchend', onTouchEnd, false);
-    }
+    (function() {
+      element.addEventListener('touchstart', onTouchStartMove, false);
+      element.addEventListener('touchmove', onTouchStartMove, false);
+      element.addEventListener('touchend', onTouchEnd, false);
+      element.addEventListener('webkitmouseforcewillbegin', checkMacForce, false);
+      element.addEventListener('webkitmouseforcechanged', checkMacForce, false);
+    })();
   </script>
 </body>
 
