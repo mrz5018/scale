@@ -1,3 +1,5 @@
+NOTE: This was forked from pltarun and has now been merged back into the project.  Please direct all issues/requests to that project at https://github.com/pltarun/scale
+
 # Scale
 This uses JavaScript, so it doesn't need to be sneaky about being a scale. It works offline as well, if you add it to your home screen from Safari.
 
