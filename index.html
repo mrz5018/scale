@@ -30,24 +30,36 @@
       text-align: center;
       font-size: 24px;
     }
+
+    #buttonarea {
+      position: fixed;
+      top: 280;
+      left: 0;
+      right: 0;
+      background-color: #e3e3e3;
+      text-align: center;
+      font-size:24px;
+      z-index: 1;
+    }
+
   </style>
 </head>
 
 <body>
   <div id="forcearea">
-    0 grams
-    </br></br>
-    <button onclick="clickTareButton">Tare</button>
+    <p id = 'forceAmount'>0 grams</p>
+    <div id="buttonarea">
+      <button id="tareButton">Tare</button>
+    </div>
   </div>
+  
   <script>
     // based on https://github.com/freinbichler/3d-touch
-    var element = document.getElementById('forcearea');
-    var tareValue = 0;
+    var touchElement = document.getElementById('forcearea');
+    var forceTextElement = document.getElementById('forceAmount');
 
-    function clickTareButton(e) {
-      e.preventDefault();
-      tareValue = forceValue;
-    }
+    var ForceValue = 0;
+    var TareValue = 0;
 
     function onTouchStartMove(e) {
       e.preventDefault();
@@ -60,8 +72,15 @@
     }
 
     function checkForce(e) {
-      touch = e.touches[0];
-      setTimeout(refreshForceValue.bind(touch), 10);
+      if(e.target.id == "buttonarea" || e.target.id == "tareButton")
+      {
+        TareValue = Math.round(ForceValue * 385) ;
+      }
+      else
+      {
+        touch = e.touches[0];
+        setTimeout(refreshForceValue.bind(touch), 10);
+      }
     }
 
     function checkMacForce(e) {
@@ -70,31 +89,29 @@
     }
 
     function refreshMacForceValue(forceValue) {
-      element.innerHTML = Math.round(forceValue * 1000) + " <br><sup style=\"color:red\">Uncalibrated for Mac</sup>";
+      forceTextElement.innerHTML = Math.round(forceValue * 1000) + " <br><sup style=\"color:red\">Uncalibrated for Mac</sup>";
     }
 
     function refreshForceValue() {
       var touchEvent = this;
-      var forceValue = 0;
+      
+      ForceValue = 0;
 
       if (touchEvent) {
-        forceValue = touchEvent.force || 0;
+        ForceValue = touchEvent.force || 0;
         setTimeout(refreshForceValue.bind(touch), 10);
-      } else {
-        forceValue = 0;
       }
 
-      //Remove the tareValue from the returned value
-      forceValue -= tareValue;
-      element.innerHTML = Math.round(forceValue * 385) + " grams";
+      //Remove the TareValue from the returned value
+      forceTextElement.innerHTML = Math.round((ForceValue * 385) - TareValue) + " grams";
     }
 
     (function() {
-      element.addEventListener('touchstart', onTouchStartMove, false);
-      element.addEventListener('touchmove', onTouchStartMove, false);
-      element.addEventListener('touchend', onTouchEnd, false);
-      element.addEventListener('webkitmouseforcewillbegin', checkMacForce, false);
-      element.addEventListener('webkitmouseforcechanged', checkMacForce, false);
+      touchElement.addEventListener('touchstart', onTouchStartMove, false);
+      touchElement.addEventListener('touchmove', onTouchStartMove, false);
+      touchElement.addEventListener('touchend', onTouchEnd, false);
+      touchElement.addEventListener('webkitmouseforcewillbegin', checkMacForce, false);
+      touchElement.addEventListener('webkitmouseforcechanged', checkMacForce, false);
     })();
   </script>
 </body>
