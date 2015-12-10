@@ -7,7 +7,7 @@
 
   <title>Pressure Scale</title>
   <meta name="viewport" content="initial-scale=1.0001, minimum-scale=1.0001, maximum-scale=1.0001, user-scalable=no">
-  <meta name="description" content="Weight small objects using your 3D touch enabled iPhone!">
+  <meta name="description" content="Weigh small objects using your 3D touch enabled iPhone!">
   <meta name="author" content="Tarun Pemmaraju">
   <link rel="apple-touch-icon-precomposed" sizes="512x512" href="icon.png" />
   <!-- icon from http://www.flaticon.com/free-icon/food-scale-tool_45327 -->
@@ -36,10 +36,18 @@
 <body>
   <div id="forcearea">
     0 grams
+    </br></br>
+    <button onclick="clickTareButton">Tare</button>
   </div>
   <script>
     // based on https://github.com/freinbichler/3d-touch
     var element = document.getElementById('forcearea');
+    var tareValue = 0;
+
+    function clickTareButton(e) {
+      e.preventDefault();
+      tareValue = forceValue;
+    }
 
     function onTouchStartMove(e) {
       e.preventDefault();
@@ -68,6 +76,7 @@
     function refreshForceValue() {
       var touchEvent = this;
       var forceValue = 0;
+
       if (touchEvent) {
         forceValue = touchEvent.force || 0;
         setTimeout(refreshForceValue.bind(touch), 10);
@@ -75,6 +84,8 @@
         forceValue = 0;
       }
 
+      //Remove the tareValue from the returned value
+      forceValue -= tareValue;
       element.innerHTML = Math.round(forceValue * 385) + " grams";
     }
 
